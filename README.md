@@ -13,7 +13,7 @@ test: windows10 64bit
 # required program
 
 * Chrome and [ChromeDriver](https://chromedriver.chromium.org/downloads)(same version)
-		* Show ChromeVersion URL: [chrome://settings/help](chrome://settings/help)
+    * Show ChromeVersion URL: [chrome://settings/help](chrome://settings/help)
 *  python3 and pip
 
 
@@ -42,7 +42,6 @@ chrome.exe --remote-debugging-port=9222 --user-data-dir="C:/Users/%USERNAME%/Des
 Eliminate all apples or get the highest score
   
  ## todo
-1. Square Drag
 1. back tracking
 1. Graph modeling
 1. Optimization and structuring

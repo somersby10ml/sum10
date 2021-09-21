@@ -1,3 +1,4 @@
+import numpy
 
 class Sum10:
 
@@ -10,38 +11,26 @@ class Sum10:
         rows = len(number_array)
         cols = len(number_array[0])
 
-        cnt = 0
-        while True:
-            # find x array
-            for x in range(cols):
-                while True:
-                    idx = self.array_find_rows_Value(number_array, x)
-                    if idx == -1:
-                        break
+        location = numpy.argwhere(number_array != 0)
+        # 위치를 찾고
+        for y, x in location:
+            # 해당 위치부터 스캔함
+            for yy in range(y, rows+1):
+                for xx in range(x, cols+1):
 
-                    for a in range(idx[0], idx[0] + idx[1]):
-                        number_array[a][x] = -1
+                    # 첫번째는 패스
+                    if numpy.size(number_array[y:yy, x:xx]) < 1:
+                        continue
 
-                    # self.Drag(x, idx[0], 1, idx[1])
-                    return x, idx[0], 1, idx[1]
-                    # cnt = cnt + 1
+                    # 10 이 넘으면
+                    s = numpy.sum(number_array[y:yy, x:xx])
+                    if s > 10:
+                        continue
 
-            # find y array
-            for y in range(rows):
-                while True:
-                    idx = self.array_find_cols_Value(number_array[y])
-                    if idx == -1:
-                        break
-
-                    for a in range(idx[0], idx[0] + idx[1]):
-                        number_array[y][a] = -1
-
-                    # self.Drag(idx[0], y, idx[1], 1)
-                    return idx[0], y, idx[1], 1
-                    # cnt = cnt + 1
-
-            if cnt == 0:
-                break
+                    # ok
+                    if s == 10:
+                        number_array[y:yy, x:xx].fill(0)
+                        return x, y, xx-x, yy-y
 
         return 0, 0, 0, 0
 
@@ -61,7 +50,7 @@ class Sum10:
             sum = 0
             for x in range(i, len(arr)):
 
-                if arr[x] == -1:
+                if arr[x] == 0:
                     continue
 
                 sum += arr[x]
@@ -82,14 +71,14 @@ class Sum10:
         """
         # 전체를 루프함
         for i in range(len(arr)):
-            if arr[i][idx] == -1:
+            if arr[i][idx] == 0:
                 continue
 
             # 해당 인덱스부터 10이 되는걸 체크함
             sum = 0
             for y in range(i, len(arr)):
 
-                if arr[y][idx] == -1:
+                if arr[y][idx] == 0:
                     continue
 
                 sum += arr[y][idx]

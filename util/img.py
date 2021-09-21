@@ -20,5 +20,5 @@ class Ocr:
             all_zeros = not numpy.any(tempDiff)
             if all_zeros:
                 return idx + 1
-        return -1
+        return 0
 
