@@ -18,7 +18,7 @@ test: windows10 64bit
 
 
 # install
-1. ChromeDriver download chrome same version and save project folder
+1. Download ChromeDriver which is same version as Chrome and save it to the project folder
  2. run pip command
 
  ```shell
