@@ -3,7 +3,7 @@
 
 Apple Game([fruit_box_a](https://www.gamesaien.com/game/fruit_box_a/)) macro
 
-this project use python3.9 and selenium and cv2
+python3.9 and selenium and cv2 are required for this project
 
 test: windows10 64bit
 
