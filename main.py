@@ -1,6 +1,8 @@
 from selenium import webdriver
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.common.by import By
+from concurrent.futures import ThreadPoolExecutor
 
 import numpy
 import base64
@@ -28,7 +30,7 @@ class AppleGame:
         :return: cv2 image array
         """
         try:
-            canvas = self.driver.find_element_by_id('canvas')
+            canvas = self.driver.find_element(By.ID,'canvas')
             canvas_base64 = self.driver.execute_script("return arguments[0].toDataURL('image/png').substring(21);",                                  canvas)
             canvas_png = base64.b64decode(canvas_base64)
             nparr = numpy.frombuffer(canvas_png, numpy.uint8)
@@ -72,45 +74,29 @@ class AppleGame:
         :param height: count
         :return: None
         """
-        canvas = self.driver.find_element_by_id('canvas')
+        canvas = self.driver.find_element(By.ID, 'canvas')
+        canvas_left = (canvas.size['width'] / 2 - 70) 
+        canvas_top = (canvas.size['height'] / 2 - 70)
+
+
+        start = (canvas_left, canvas_top)
+        x =  (33 * x) - start[0]
+        y =  (33 * y) - start[1] 
+        wIndex =  (width * 33) 
+        hIndex =  (height * 33)
         action = ActionChains(self.driver)
 
-        start = (70, 71)
-
-        x = start[0] + (33 * x)
-        y = start[1] + (33 * y)
-
-        wIndex = width
-        hIndex = height
-
         action.move_to_element_with_offset(canvas, x, y)
-        action.click_and_hold()
-        action.move_by_offset(33 * wIndex, 33 * hIndex)
-        action.pause(0.001)
+        action.click_and_hold()  
+        action.move_by_offset(wIndex, hIndex)
+        
+        action.pause(0.01)
         action.release().perform()
 
     def close(self):
         self.driver.quit()
 
-
 if __name__ == '__main__':
-
-#     a = numpy.array([[6, 0, 8, 0, 0, 0, 0, 5, 3, 0, 5, 9, 0, 0, 0, 9, 7]
-# , [0, 0, 5, 0, 6, 7, 9, 0, 0, 0, 0, 9, 3, 0, 0, 5, 0]
-# , [0, 6, 8, 0, 8, 6, 6, 9, 0, 0, 6, 5, 8, 8, 0, 0, 0]
-# , [0, 0, 7, 0, 6, 9, 0, 5, 0, 0, 9, 4, 8, 1, 0, 0, 0]
-# , [0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 7, 8, 6, 2, 0, 6, 0]
-# , [0, 8, 0, 0, 5, 0, 0, 1, 0, 8, 4, 0, 0, 9, 0, 8, 0]
-# , [0, 1, 0, 0, 0, 0, 8, 5, 0, 6, 2, 7, 8, 5, 0, 0, 1]
-# , [0, 0, 0, 0, 9, 0, 4, 0, 0, 8, 9, 9, 0, 6, 0, 8, 4]
-# , [0, 0, 0, 0, 9, 0, 2, 0, 0, 9, 0, 0, 0, 0, 0, 8, 4]
-# , [8, 0, 0, 1, 4, 0, 2, 7, 0, 2, 0, 9, 5, 2, 0, 4, 3]])
-#
-#     calc = Sum10()
-#     aa = calc.calc(a)
-#     # print(aa)
-#     print(a)
-#     exit()
 
     Game = AppleGame()
     npimage = Game.getImageFromCanvas()  # get image
@@ -123,7 +109,6 @@ if __name__ == '__main__':
             break
 
         Game.Drag(x, y, w, h)
-    print(numbary_array)
     print('finish')
     Game.close()
 
